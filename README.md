@@ -1,3 +1,5 @@
+[Not yet functional]
+
 # KLFC-Gen
 Python CLI utility to generate Keyboard Layout Editor (http://www.keyboard-layout-editor.com/) .json files from KLFC (https://github.com/39aldo39/klfc) layout files.
 
