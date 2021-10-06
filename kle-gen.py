@@ -4,6 +4,14 @@ from os import path
 
 MIN_ARGS = 3
 VALID_OPTIONS = [["-kt", "-ks", "-kc", "-lc", "-sl", "-bc"], ["--keyboard-type", "--keyboard-size", "--key-color", "--label-color", "--shift-levels", "--back-color"]]
+OPTION_DEFAULTS = {
+	"-kt" : "iso",
+	"-ks" : "100",
+	"-kc" : "545454",
+	"-lc" : "e0dcc8",
+	"-bc" : "454545",
+	"-sl" : "1"
+}
 
 #Each entry is an array of positions (positions.md). First entry is the one in the base .json. Other ones are aliases.
 #This array is processed to match a keyboard type and size if supplied.
@@ -20,6 +28,7 @@ ALIASES = [
 
 
 def main():	
+	#Check for arg numbers
 	if len(sys.argv) == 1:
 		usage()
 		return
@@ -37,10 +46,35 @@ def main():
 		# Check that args are good
 		if not check_args():
 			usage()
-			return			
+			return	
+					
 	#Fall-through only with good args and good arg number.
-	pass
+	
+	#Get all components
+	comps = extract_components(True)
+	
+	#Get list of present keys
+	keys = []
+	for k in comps.keys():
+		keys.append(k)
 		
+	#Normalize keys to short form
+	for i in range(0, len(keys)):
+		if keys[i] in VALID_OPTIONS[1]:
+			comps[VALID_OPTIONS[0][VALID_OPTIONS[1].index(keys[i])]] = comps[keys[i]]
+			del comps[keys[i]]
+			print(comps)
+			
+	#Fill with missing options	
+	for i in OPTION_DEFAULTS.keys():
+		if i not in comps.keys():
+			comps[i] = OPTION_DEFAULTS[i]
+			
+	#Open input file, parse .json, load to memory
+	
+	#Create output file from base, change based on memory
+	
+
 # Check args for number and validity.
 def check_args():
 	max_args = len(VALID_OPTIONS[0]) + len(VALID_OPTIONS[1]) + MIN_ARGS
@@ -68,8 +102,6 @@ def check_args():
 		if not i in VALID_OPTIONS[0] and not i in VALID_OPTIONS[1]:
 			print("\nInvalid option: " + i + "\n")
 			return False	
-	
-	print(options)
 	
 	# Check if option values exist
 	for i in options.keys():
@@ -107,7 +139,6 @@ def check_args():
 		
 	return True
 		
-
 # Returns a dictionary with all relevant components. Components not checked for validity.
 def extract_components(include_file_and_path):
 	extracted = {}
@@ -139,7 +170,7 @@ def help():
 	print("\nSYNTAX:")
 	print("python kle-gen.py [OPTIONS] file_to_convert.json [OUTPUT_PATH]\n")
 	print("OPTIONS:")
-	print("-kt / --keyboard-type (optional): Keyboard type. Defaults to ANSI. Can be ANSI, ISO, JIS or ABNT")
+	print("-kt / --keyboard-type (optional): Keyboard type. Defaults to ISO. Can be ANSI, ISO, JIS or ABNT")
 	print("-ks / --keyboard-size (optional): Keyboard size (integer; 100, 80 or 60). Defaults to 100%.")
 	print("-kc / --key-color     (optional): Key color (hex value). Defaults to grey.")
 	print("-lc / --label-color   (optional): Label color (hex value). Defaults to off-white.")
