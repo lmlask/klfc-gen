@@ -1,0 +1,82 @@
+{
+  "fullName": "WorkmanBR",
+  "name": "wkmbr",
+  "copyright": "Public Domain",
+  "company": "2022-01-01 Lui Wolff",
+  "localeId": "00000416",
+  "version": "1.0",
+  "singletonKeys": [
+    [ "CapsLock", "Extend" ]
+  ],
+  "keysWithShiftlevels": [
+    {
+      "shiftlevels": [ "None", "Shift", "Extend" ],
+      "keys": [
+        { "pos": "~", "letters": [ "'", "\"", "CapsLock" ] },
+        { "pos": "1", "letters": [ "1", "!", "F1" ] },
+        { "pos": "2", "letters": [ "2", "@", "F2" ] },
+        { "pos": "3", "letters": [ "3", "#", "F3" ] },
+        { "pos": "4", "letters": [ "4", "$", "F4" ] },
+        { "pos": "5", "letters": [ "5", "%", "F5" ] },
+        { "pos": "6", "letters": [ "6", "diaeresis", "F6" ] },
+        { "pos": "7", "letters": [ "7", "&", "F7" ] },
+        { "pos": "8", "letters": [ "8", "*", "F8" ] },
+        { "pos": "9", "letters": [ "9", "(", "F9" ] },
+        { "pos": "0", "letters": [ "0", ")", "F10" ] },
+        { "pos": "-", "letters": [ "-", "_", "F11" ] },
+        { "pos": "+", "letters": [ "=", "+", "F12" ] },
+        { "pos": "Q", "letters": [ "q", "Q", "Esc" ] },
+        { "pos": "W", "letters": [ "d", "D" ] },
+        { "pos": "E", "letters": [ "r", "R" ] },
+        { "pos": "R", "letters": [ "w", "W" ] },
+        { "pos": "T", "letters": [ "b", "B" ] },
+        { "pos": "Y", "letters": [ "j", "J", "PageUp" ] },
+        { "pos": "U", "letters": [ "f", "F", "Home" ] },
+        { "pos": "I", "letters": [ "u", "U", "Up" ] },
+        { "pos": "O", "letters": [ "p", "P", "End" ] },
+        { "pos": "P", "letters": [ "ç", "Ç", "WheelUp" ] },
+        { "pos": "[", "letters": [ "acute", "grave", "Esc" ] },
+        { "pos": "]", "letters": [ "[", "{", "Insert" ] },
+        { "pos": "A", "letters": [ "a", "A", "Alt" ] },
+        { "pos": "S", "letters": [ "s", "S", "'" ] },
+        { "pos": "D", "letters": [ "h", "H", "Shift" ] },
+        { "pos": "F", "letters": [ "t", "T", "Control" ] },
+        { "pos": "G", "letters": [ "g", "G" ] },
+        { "pos": "H", "letters": [ "y", "Y", "PageDown" ] },
+        { "pos": "J", "letters": [ "n", "N", "Left" ] },
+        { "pos": "K", "letters": [ "e", "E", "Down" ] },
+        { "pos": "L", "letters": [ "o", "O", "Right" ] },
+        { "pos": ";", "letters": [ "i", "I", "WheelDown" ] },
+        { "pos": "'", "letters": [ "tilde", "circumflex", "Menu" ] },
+        { "pos": "\\", "letters": [ "]", "}" ] },
+        { "pos": "Iso", "letters": [ ";", ":" ] },
+        { "pos": "Z", "letters": [ "z", "Z", "Undo" ] },
+        { "pos": "X", "letters": [ "x", "X", "Cut" ] },
+        { "pos": "C", "letters": [ "m", "M", "Copy" ] },
+        { "pos": "V", "letters": [ "c", "C", "Paste" ] },
+        { "pos": "B", "letters": [ "v", "V" ] },
+        { "pos": "N", "letters": [ "k", "K", "Enter" ] },
+        { "pos": "M", "letters": [ "l", "L", "Backspace" ] },
+        { "pos": ",", "letters": [ ",", "<", "Delete" ] },
+        { "pos": ".", "letters": [ ".", ">" ] },
+        { "pos": "/", "shiftlevels": [ "None", "Extend" ], "letters": [ "Shift", "compose" ] },
+        { "pos": "Ro", "letters": [ "/", "?" ] },
+        { "pos": "Shift_R", "letters": [ "\\", "|" ] }
+      ]
+    },
+    {
+      "shiftlevels": [ "Extend" ],
+      "keys": [
+        { "pos": "Escape", "letters": [ "MouseEnable" ] },
+        { "pos": "F1", "letters": [ "PlayPause" ] },
+        { "pos": "F2", "letters": [ "Previous" ] },
+        { "pos": "F3", "letters": [ "Next" ] },
+        { "pos": "F4", "letters": [ "Stop" ] },
+        { "pos": "F5", "letters": [ "Mute" ] },
+        { "pos": "F6", "letters": [ "VolumeDown" ] },
+        { "pos": "F7", "letters": [ "VolumeUp" ] },
+        { "pos": "Space", "letters": [ "Enter" ] }
+      ]
+    }
+  ]
+}

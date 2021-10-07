@@ -1,5 +1,5 @@
 # Generate KLE json from KLFC keyboard layout json
-import sys, json, re, copy
+import sys, json, re, copy, os
 from os import path
 
 MIN_ARGS = 3
@@ -31,7 +31,7 @@ ALIASES = [
 	]
 
 def main():	
-	#Check for arg numbers
+	#Check for arg numbers	
 	if len(sys.argv) == 1:
 		usage()
 		return
@@ -49,43 +49,63 @@ def main():
 		# Check that args are good
 		if not check_args():
 			usage()
-			return					
+			return	
 	#Fall-through only with good args and good arg number.
-	
+	#Get all options, already tested
 	comps = parse_components()
-		
+	
 	#Open input file, parse .json, strip of all comments, load to memory
 	file1 = open(comps["file"])
 	file2 = open("./temp", 'w')
-	
 	for line in file1.readlines():
 		x = re.findall('^//', line)
 		if not x:
 			file2.write(line)
-			
 	file1.close()
 	file2.close()	
-		
 	with open("./temp") as f:
 		data = json.load(f)
+	os.remove("./temp")
 		
-	# Identify source file formatting	
-	if "keys" in data:
-		# A single keyblock
-		if len(data["shiftlevels"]) > comps["-sl"]:
-			print
-		print(len(data["shiftlevels"]))
-		
-	elif "keysWithShiftlevels" in data:
-	# More than one keyblock
-		for i in data["keysWithShiftlevels"]:
-			print(i)
-	
+	# Identify source file formatting and parse source file	to a dictionary
+	key_list = parse_source_json(data, comps)
 	
 	#Create output file from base, change based on memory
 	keyb_type = comps["-kt"].lower()
 	keyb_size = comps["-ks"]
 	base_file = "base_" + keyb_type + "_" + keyb_size + ".json"
+	
+def parse_source_json(data, comps):	
+	if "keys" in data:   #single keyblock
+		key_list = data["keys"]
+		#remove all shiftlevels beyond the stated in the -sl option
+		max_shiftlevels = int(comps["-sl"])
+		print("Keeping the following shift levels: " + str(data["shiftlevels"][:max_shiftlevels]))
+		for i in key_list:
+			i["letters"] = i["letters"][:max_shiftlevels]
+			#normalize keylist to keep all shiftlevels populated
+			while len(i["letters"]) < max_shiftlevels:
+				i["letters"].append("")
+		return key_list
+
+	else:   #multiple keyblocks
+		#get which shiftlevels to keep with a cursed double list comprehension which i can't think too much about right now
+		full_shiftlevels = [n for m in [i["shiftlevels"] for i in data["keysWithShiftlevels"]] for n in m]
+		#remove duplicates
+		full_shiftlevels = list(dict.fromkeys(full_shiftlevels))
+		shiftlevels_to_keep = full_shiftlevels[:int(comps["-sl"])]
+		print("Keeping the following shift levels: " + str(shiftlevels_to_keep))
+		
+		#Add shiftlevels to all blocks
+		#Canon order is the one in full_shiftlevels,other blocks are adapted to fit the ordering of the first block
+		
+		#1. Add shiftlevels to first block so it matches the -sl number
+		firstblock = data["keysWithShiftlevels"][0]
+		
+		
+		#2. Process subsequent blocks
+		for block in data["keysWithShiftlevels"][1:]
+		
 	
 
 def parse_components():
