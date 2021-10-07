@@ -3,14 +3,18 @@ import sys, json, re, copy
 from os import path
 
 MIN_ARGS = 3
-VALID_OPTIONS = [["-kt", "-ks", "-kc", "-lc", "-sl", "-bc"], ["--keyboard-type", "--keyboard-size", "--key-color", "--label-color", "--shift-levels", "--back-color"]]
+
+VALID_OPTIONS = [
+["-kt", "-ks", "-kc", "-lc", "-sl", "-bc"],
+["--keyboard-type", "--keyboard-size", "--key-color", "--label-color", "--shift-levels", "--back-color"]]
+
 OPTION_DEFAULTS = {
 	"-kt" : "iso",
 	"-ks" : "100",
 	"-kc" : "545454",
 	"-lc" : "e0dcc8",
 	"-bc" : "454545",
-	"-sl" : "1"
+	"-sl" : "2"
 }
 
 #Each entry is an array of positions (positions.md). First entry is the one in the base .json. Other ones are aliases.
@@ -25,7 +29,6 @@ ALIASES = [
 	["Insert", "INS"], ["Delete", "DELE"], ["Home", "HOME"], ["End", "END"], ["PageUp", "PGUP"], ["PageDown", "PGDN"], ["Up", "UP"], ["Left", "LEFT"], ["Down", "DOWN"], ["Right", "RGHT"],
 	["NumLock", "NMLK"], ["KP_Div", "KPDV"], ["KP_Mult", "KPMU"], ["KP_Min", "KPSU"], ["KP_7", "KP7"], ["KP_8", "KP8"], ["KP_9", "KP9"], ["KP_Plus", "KPAD"], ["KP_4", "KP4"], ["KP_5", "KP5"], ["KP_6", "KP6"], ["KP_Comma"], ["KP_1", "KP1"], ["KP_2", "KP2"], ["KP_3", "KP3"], ["KP_Enter", "KPEN"], ["KP_0", "KP0"], ["KP_Dec", "KPDL"] 
 	]
-
 
 def main():	
 	#Check for arg numbers
@@ -46,34 +49,66 @@ def main():
 		# Check that args are good
 		if not check_args():
 			usage()
-			return	
-					
+			return					
 	#Fall-through only with good args and good arg number.
 	
+	comps = parse_components()
+		
+	#Open input file, parse .json, strip of all comments, load to memory
+	file1 = open(comps["file"])
+	file2 = open("./temp", 'w')
+	
+	for line in file1.readlines():
+		x = re.findall('^//', line)
+		if not x:
+			file2.write(line)
+			
+	file1.close()
+	file2.close()	
+		
+	with open("./temp") as f:
+		data = json.load(f)
+		
+	# Identify source file formatting	
+	if "keys" in data:
+		# A single keyblock
+		if len(data["shiftlevels"]) > comps["-sl"]:
+			print
+		print(len(data["shiftlevels"]))
+		
+	elif "keysWithShiftlevels" in data:
+	# More than one keyblock
+		for i in data["keysWithShiftlevels"]:
+			print(i)
+	
+	
+	#Create output file from base, change based on memory
+	keyb_type = comps["-kt"].lower()
+	keyb_size = comps["-ks"]
+	base_file = "base_" + keyb_type + "_" + keyb_size + ".json"
+	
+
+def parse_components():
 	#Get all components
 	comps = extract_components(True)
 	
-	#Get list of present keys
+	#Get list of present options
 	keys = []
 	for k in comps.keys():
 		keys.append(k)
 		
-	#Normalize keys to short form
+	#Normalize options to short form
 	for i in range(0, len(keys)):
 		if keys[i] in VALID_OPTIONS[1]:
 			comps[VALID_OPTIONS[0][VALID_OPTIONS[1].index(keys[i])]] = comps[keys[i]]
 			del comps[keys[i]]
-			print(comps)
 			
-	#Fill with missing options	
+	#Fill with missing options and their default values	
 	for i in OPTION_DEFAULTS.keys():
 		if i not in comps.keys():
 			comps[i] = OPTION_DEFAULTS[i]
 			
-	#Open input file, parse .json, load to memory
-	
-	#Create output file from base, change based on memory
-	
+	return comps
 
 # Check args for number and validity.
 def check_args():
@@ -174,7 +209,7 @@ def help():
 	print("-ks / --keyboard-size (optional): Keyboard size (integer; 100, 80 or 60). Defaults to 100%.")
 	print("-kc / --key-color     (optional): Key color (hex value). Defaults to grey.")
 	print("-lc / --label-color   (optional): Label color (hex value). Defaults to off-white.")
-	print("-sl / --shift-levels  (optional): Shift levels (integer, 1-4). Shift levels will be placed in the following order: top left, bottom left, top right, bottom right. Defaults to 1.\n")
+	print("-sl / --shift-levels  (optional): Shift levels (integer, 1-4). Shift levels will be placed in the following order: top left, bottom left, top right, bottom right. Defaults to 2.\n")
 	print("The last argument MUST be the output path. Simply add '.' to default to the script dir. Must be a directory.")
 	print("The second to last argument MUST be the KLFC .json file to convert. Absolute or relative path.\n")
 	print("Full input example:     python kle-gen.py -kt iso -ks 80 -kc #a5a5a5 -lc #aaaaaa -sl 2 ./colemak.json .")
