@@ -45,5 +45,5 @@ The second to last argument MUST be the KLFC .json file to convert. Absolute or 
 
 `-bc / --back-color   (optional): Keyboard background color (hex value). Defaults to grey.`
 
-`-sl / --shift-levels  (optional): Shift levels (integer, 1-4). Shift levels will be placed in the following order: top left, bottom left, top right, bottom right. Defaults to 1.`
+`-sl / --shift-levels  (optional): Shift levels (integer, 1-4). Shift levels will be placed in the following order: top left, bottom left, top right, bottom right. Defaults to 2.`
 
